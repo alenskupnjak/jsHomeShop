@@ -8,6 +8,10 @@ let cart = [];
 
 //
 document.addEventListener('DOMContentLoaded', () => {
+  //  SET up app
+  ui.setup(storage)
+
+
   // povuci podatke
   proizvodi
     .getProduct()

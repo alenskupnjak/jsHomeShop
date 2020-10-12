@@ -26,6 +26,7 @@ class UI {
     // console.log(cartTotal, cartContent, productsDOM);
   }
 
+  // prikaz polja dolje
   displayProducts(products) {
     let result = '';
     products.forEach((element) => {
@@ -65,55 +66,49 @@ class UI {
         console.log(e.target);
         e.target.innerText = 'In chart';
         e.target.disabled = true;
-
         // get proizvos from, products
-        let dataStorage = { ...storage.getProduct(id), amount: 1 };
-
+        let jedanCart = { ...storage.getProduct(id), amount: 1 };
         // add product to cards
-        this.cart.push(dataStorage);
-
+        this.cart.push(jedanCart);
         // save cart in local storage
         storage.saveCart(this.cart);
-
         // set cart values
         this.setCartValues(this.cart);
-
         // display cart item
-        this.addCartItem(dataStorage);
-
+        this.addCartItem(jedanCart);
         // show the cart
         this.showCard(storage);
       });
     });
   }
 
-  // dodaj
-  addCartItem(dataStorage) {
-    console.log(dataStorage);
+  // dodaj u sidebar jedan cart
+  addCartItem(jedanCart) {
+    console.log(jedanCart);
 
     const div = document.createElement('div');
     div.classList.add('cart-item');
     div.innerHTML = `
     <!-- cart item -->
-    <img src=${dataStorage.img} alt="product">
+    <img src=${jedanCart.img} alt="product">
     <div>
-      <h4>${dataStorage.title}</h4>
-      <h5>$${dataStorage.price}</h5>
-      <span class="remove-item" data-id="${dataStorage.id}">Remove</span>
+      <h4>${jedanCart.title}</h4>
+      <h5>$${jedanCart.price}</h5>
+      <span class="remove-item" data-id="${jedanCart.id}">Remove</span>
     </div>
     <div>
-      <i class="fas fa-chevron-up dodaj" data-id="${dataStorage.id}"></i>
-      <p class="item-amount" data-id="${dataStorage.id}">${dataStorage.amount}</p>
-      <i class="fas fa-chevron-down oduzmi" data-id="${dataStorage.id}"></i>
+      <i class="fas fa-chevron-up dodaj" data-id="${jedanCart.id}"></i>
+      <p class="item-amount" data-id="${jedanCart.id}">${jedanCart.amount}</p>
+      <i class="fas fa-chevron-down oduzmi" data-id="${jedanCart.id}"></i>
     </div>
     <!-- END cart item -->
     `;
 
     // Ubaci u DOM
     this.cartContent.appendChild(div);
-    console.log(this.cartContent);
   }
 
+  //  prikaz totalne količine
   setCartValues(cart) {
     let tepmTotal = 0;
     let itemsTotal = 0;
@@ -126,53 +121,92 @@ class UI {
     this.cartItems.innerHTML = itemsTotal;
   }
 
+  // *********************************
   // prikazi karte u side bar
   showCard(storage) {
     this.cartOverlay.classList.add('transparentBcg');
     this.cartDOM.classList.add('showCart');
+  }
+  
+  // *************************************
+  //  setup pocetni zaslon
+  setup(storage) {
+    // povlačimo podatke iz local storage
+    this.cart = storage.getCart();
+    // popuni side bar sa podacima iz localstorage
+    this.populate(this.cart);
+    // popuni totalsum i totalitem
+    this.setCartValues(this.cart);
+    // prikazi side bar
 
-    //  zatvori side bar
-    this.closeCartBtn.addEventListener('click', (e) => {
-      this.cartOverlay.classList.remove('transparentBcg');
-      this.cartDOM.classList.remove('showCart');
-    });
-
-    //  dodavanje na klicine
-    document.querySelectorAll('.dodaj').forEach((item) => {      
+    //  DODAVANJE kolicine
+    document.querySelectorAll('.dodaj').forEach((item) => {
+      let novakolicina = 0;
+      console.log('novaKolicina plus+=', novakolicina);
       item.addEventListener('click', (e) => {
-        let novakolicina;
-        console.log('next=',e.target.nextElementSibling);
-        
-        // e.target.nextSibling.innerHTML = '10'
         const id = e.target.getAttribute('data-id');
-
         //  nova vrijednost polja upisanih
         this.cart = this.cart.map((item) => {
           if (item.id === id) {
             item.amount += 1;
-            novakolicina = item.amount
+            novakolicina = item.amount;
+            console.log('novaKolicina=', novakolicina);
           }
-          return item
+          return item;
         });
-
         // refresh kolicine podataka
-        e.target.nextElementSibling.innerHTML = novakolicina 
-
-        console.log(this.cart);
-
+        e.target.nextElementSibling.innerHTML = novakolicina;
         // save cart in local storage
         storage.saveCart(this.cart);
-
         // set cart values
         this.setCartValues(this.cart);
       });
     });
 
+    // ODUZIMANJE kolicine oduzmi dijela
     document.querySelectorAll('.oduzmi').forEach((item) => {
+      let novakolicina = 0;
+      console.log('novaKolicina minus=', novakolicina);
       item.addEventListener('click', (e) => {
         const id = e.target.getAttribute('data-id');
-        console.log('oduzimam', id);
+        //  nova vrijednost polja upisanih
+        this.cart = this.cart.map((item) => {
+          if (item.id === id) {
+            item.amount -= 1;
+            if (item.amount < 0) {
+              console.log('sada stavi nulu');
+            }
+            novakolicina = item.amount;
+            console.log('novaKolicina=', novakolicina);
+          }
+          return item;
+        });
+        // refresh kolicine podataka
+        e.target.previousElementSibling.innerHTML = novakolicina;
+        // save cart in local storage
+        storage.saveCart(this.cart);
+        // set cart values
+        this.setCartValues(this.cart);
+
+        novakolicina = 0;
       });
     });
+
+    this.cartBtn.addEventListener('click', (e) => {
+      this.showCard(storage);
+    });
+    //
+    this.closeCartBtn.addEventListener('click', (e) => {
+      this.cartOverlay.classList.remove('transparentBcg');
+      this.cartDOM.classList.remove('showCart');
+    });
+  }
+
+  // popinjavanje DOM
+  populate(cart) {
+    cart.forEach((jedanCart) => {
+      this.addCartItem(jedanCart);
+    });
+    console.log(this.cartContent);
   }
 }
