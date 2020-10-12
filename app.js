@@ -19,9 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
       storage.saveProduct(proizvod);
     })
     .then(() => {
-      ui.btns = document.querySelectorAll('.bag-btn');
-      console.log(ui.btns);
-      
-      
+      ui.getBagButtons(storage);
     });
 });
