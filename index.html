@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home shop</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+    integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+    crossorigin="anonymous" />
+</head>
+
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="navbar-center">
+      <span class="nav-icon">
+        <i class="fas fa-bars"></i>
+      </span>
+      <div class="cart-btn">
+        <span class="nav-icon">
+          <i class="fas fa-cart-plus"></i>
+        </span>
+        <div class="cart-items">0</div>
+      </div>
+    </div>
+  </nav>
+  <!-- END NAVBAR -->
+
+  <header class="hero">
+    <div class="banner">
+      <h1 class="banner-title">Najmestaj</h1>
+      <button class="banner-btn">Shop now</button>
+    </div>
+  </header>
+
+  <section class="products">
+    <div class="section-title">
+      <h2>Nasi proizvodi</h2>
+    </div>
+
+    <div class="products-center">
+      <!-- Pojedinacno proizvod -->
+      <!-- <article class="product">
+        <div class="img-container">
+          <img src="./images/product-1.jpeg" alt="" class="product-img">
+          <button class="bag-btn" data-id="1"><i class="fas fa-shopping-cart"></i>Dodaj u kosaricu</button>
+        </div>
+        <h3>queen bed</h3>
+        <h4>$156</h4>
+      </article> -->
+      <!-- KRAJ Pojedinacno proizvod -->
+    </div>
+  </section>
+
+  <div class="cart-overlay">
+    <div class="cart">
+      <span class="close-cart"> <i class="fa fa-window-close"></i> </span>
+
+      <h2>cHART</h2>
+      <div class="cart-content">
+        <!-- cart item -->
+        <div class="cart-item">
+          <img src="./images/product-1.jpeg" alt="product">
+          <div>
+            <h4>queen</h4>
+            <h5>9$</h5>
+            <span class="remove-item">Remove</span>
+          </div>
+          <div>
+            <i class="fas fa-chevron-up"></i>
+            <p class="item-amount">1</p>
+            <i class="fas fa-chevron-down"></i>
+          </div>
+        </div>
+        <!-- END cart item -->
+      </div>
+
+      <!-- FOOTER -->
+      <div class="cart-footer">
+        <h3>Your total: $
+          <span class="cart-total">0</span>
+        </h3>
+        <button class="clear-cart banner-btn">Clear Cart</button>
+      </div>
+
+    </div>
+  </div>
+
+
+
+
+
+  <script src="UI.js"></script>
+  <script src="Proizvodi.js"></script>
+  <script src="storage.js"></script>
+  <script src="app.js"></script>
+</body>
+
+</html>

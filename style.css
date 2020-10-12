@@ -18,6 +18,8 @@ body {
   background: var(--mainWhite);
   font-family: "Lato", sans-serif;
 }
+
+/* --------------- Products ---------------- */
 /* --------------- Navbar ---------------- */
 .navbar {
   position: sticky;
@@ -55,10 +57,15 @@ body {
   color: var(--mainWhite);
 }
 /* --------------- End of Navbar ---------------- */
+
+
 /* --------------- Hero ---------------- */
 .hero {
   min-height: calc(100vh - 60px);
-  background: url("./images/hero-bcg.jpeg") center/cover no-repeat;
+  background: url("./images/hero-bcg.jpeg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -81,6 +88,7 @@ body {
   letter-spacing: var(--mainSpacing);
   font-size: 1rem;
   background: var(--primaryColor);
+  background: red;
   color: var(--mainBlack);
   border: 1px solid var(--primaryColor);
   transition: var(--mainTransition);
@@ -91,11 +99,11 @@ body {
   color: var(--primaryColor);
 }
 /* --------------- End of Hero ---------------- */
-/* --------------- Products ---------------- */
 
 .products {
   padding: 4rem 0;
 }
+
 .section-title h2 {
   text-align: center;
   font-size: 2.5rem;
@@ -103,13 +111,15 @@ body {
   text-transform: capitalize;
   letter-spacing: var(--mainSpacing);
 }
+
 .products-center {
   width: 90vw;
   margin: 0 auto;
   max-width: 1170px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  grid-column-gap: 1.5rem;
+  /* grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); */
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-column-gap: 1rem;
   grid-row-gap: 2rem;
 }
 .img-container {
@@ -127,7 +137,7 @@ body {
   letter-spacing: var(--mainSpacing);
   font-weight: bold;
   transition: var(--mainTransition);
-  transform: translateX(101%);
+  transform: translateX(110%);
   cursor: pointer;
 }
 .bag-btn:hover {
@@ -174,6 +184,7 @@ body {
   height: 100%;
   transition: var(--mainTransition);
   background: rgb(240, 157, 81, 0.5);
+  /* background: blue; */
   z-index: 2;
   visibility: hidden;
 }
@@ -186,6 +197,7 @@ body {
   overflow: scroll;
   z-index: 3;
   background: rgb(231, 226, 221);
+  background: #fff; 
   padding: 1.5rem;
   transition: var(--mainTransition);
   transform: translateX(100%);
@@ -217,6 +229,7 @@ body {
 .cart-item {
   display: grid;
   align-items: center;
+  /* grid-template-columns: img div div  */
   grid-template-columns: auto 1fr auto;
   grid-column-gap: 1.5rem;
   margin: 1.5rem 0;
@@ -259,3 +272,9 @@ body {
 }
 
 /* --------------- End of Cart ---------------- */
+
+@media (max-width: 500px) {
+  .products-center {
+    grid-template-columns: 1fr 1fr;
+  }
+}
