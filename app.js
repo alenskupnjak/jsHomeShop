@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
       return proizvod
     })
     .then((proizvod) => {
-      console.log(proizvod);
       ui.getBagButtons(storage);
       ui.cartLogic(storage, proizvod)
     });

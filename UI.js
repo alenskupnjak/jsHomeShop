@@ -65,6 +65,16 @@ class UI {
         this.showCard(storage);
       });
     });
+
+    // pokupim sve naslove 'Dodaj u košaricu' i promjenim ako je zapis u localStorage
+    document.querySelectorAll('.bag-btn').forEach((e) => {
+      const id = e.getAttribute('data-id');
+      this.cart.forEach((data) => {
+        if (data.id === id) {
+          e.innerHTML = 'In chart';
+        }
+      });
+    });
   }
 
   // dodaj u sidebar jedan cart
@@ -116,9 +126,7 @@ class UI {
   setup(storage) {
     this.cartContent.addEventListener('click', (e) => {
       let novakolicina = 0;
-      console.log(e.target);
       const id = e.target.getAttribute('data-id');
-      console.log('id=', id);
 
       //  brisi sa  cart liste
       if (e.target.classList.contains('remove-item')) {
@@ -127,7 +135,7 @@ class UI {
         storage.saveCart(this.cart);
         this.cartContent.innerHTML = '';
         this.populate(this.cart);
-        this.setCartValues(this.cart)
+        this.setCartValues(this.cart);
         document.querySelectorAll('.bag-btn').forEach((button) => {
           if (
             button.innerHTML === 'In chart' &&
@@ -157,6 +165,7 @@ class UI {
         this.setCartValues(this.cart);
       }
 
+      // oduzima broj više
       if (e.target.classList.contains('oduzmi')) {
         console.log('mod ODUZIMANJA');
         this.cart = this.cart.map((item) => {
