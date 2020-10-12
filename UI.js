@@ -1,5 +1,3 @@
-// const storage = new Storage();
-
 class UI {
   constructor() {
     this.cartBtn = document.querySelector('.cart-btn');
@@ -20,10 +18,6 @@ class UI {
 
     // polje u koje cemo spremati podatke za sidebar
     this.buttonsDOM = [];
-
-    // console.log(cartBtn, closeCartBtn, claerCartBtn);
-    // console.log(cartDOM, cartOverlay, cartItems);
-    // console.log(cartTotal, cartContent, productsDOM);
   }
 
   // prikaz polja dolje
@@ -35,7 +29,7 @@ class UI {
       <article class="product">
         <div class="img-container">
           <img src=${element.img} class="product-img">
-          <button class="bag-btn" data-id=${element.id}><i class="fas fa-shopping-cart"></i>Dodaj u kosaricu</button>
+          <button class="bag-btn" data-id=${element.id}><i class="fas fa-shopping-cart"></i>Dodaj u košaricu</button>
         </div>
         <h3>${element.title}</h3>
         <h4>$${element.price}</h4>
@@ -53,15 +47,6 @@ class UI {
     this.buttonsDOM = this.buttonsDOM;
     this.btns.forEach((button) => {
       let id = button.dataset.id;
-      // let inChart = this.cart.find((item) => {
-      //   return (item.id = id);
-      // });
-
-      // if (inChart) {
-      //   button.innerHTML = 'In chart';
-      //   button.disabled = true;
-      // }
-
       button.addEventListener('click', (e) => {
         console.log(e.target);
         e.target.innerText = 'In chart';
@@ -84,24 +69,22 @@ class UI {
 
   // dodaj u sidebar jedan cart
   addCartItem(jedanCart) {
-    console.log(jedanCart);
-
     const div = document.createElement('div');
     div.classList.add('cart-item');
     div.innerHTML = `
     <!-- cart item -->
-    <img src=${jedanCart.img} alt="product">
-    <div>
-      <h4>${jedanCart.title}</h4>
-      <h5>$${jedanCart.price}</h5>
-      <span class="remove-item" data-id="${jedanCart.id}">Remove</span>
-    </div>
-    <div>
-      <i class="fas fa-chevron-up dodaj" data-id="${jedanCart.id}"></i>
-      <p class="item-amount" data-id="${jedanCart.id}">${jedanCart.amount}</p>
-      <i class="fas fa-chevron-down oduzmi" data-id="${jedanCart.id}"></i>
-    </div>
-    <!-- END cart item -->
+      <img src=${jedanCart.img} alt="product">
+      <div>
+        <h4>${jedanCart.title}</h4>
+        <h5>$${jedanCart.price}</h5>
+        <span class="remove-item" data-id="${jedanCart.id}">Remove</span>
+      </div>
+      <div>
+        <i class="fas fa-chevron-up dodaj" data-id="${jedanCart.id}"></i>
+        <p class="item-amount" data-id="${jedanCart.id}">${jedanCart.amount}</p>
+        <i class="fas fa-chevron-down oduzmi" data-id="${jedanCart.id}"></i>
+      </div>
+      <!-- END cart item -->
     `;
 
     // Ubaci u DOM
@@ -127,30 +110,42 @@ class UI {
     this.cartOverlay.classList.add('transparentBcg');
     this.cartDOM.classList.add('showCart');
   }
-  
+
   // *************************************
   //  setup pocetni zaslon
   setup(storage) {
-    // povlačimo podatke iz local storage
-    this.cart = storage.getCart();
-    // popuni side bar sa podacima iz localstorage
-    this.populate(this.cart);
-    // popuni totalsum i totalitem
-    this.setCartValues(this.cart);
-    // prikazi side bar
-
-    //  DODAVANJE kolicine
-    document.querySelectorAll('.dodaj').forEach((item) => {
+    this.cartContent.addEventListener('click', (e) => {
       let novakolicina = 0;
-      console.log('novaKolicina plus+=', novakolicina);
-      item.addEventListener('click', (e) => {
-        const id = e.target.getAttribute('data-id');
-        //  nova vrijednost polja upisanih
+      console.log(e.target);
+      const id = e.target.getAttribute('data-id');
+      console.log('id=', id);
+
+      //  brisi sa  cart liste
+      if (e.target.classList.contains('remove-item')) {
+        console.log('-- mod BRISANJA');
+        this.cart = this.cart.filter((item) => item.id !== id);
+        storage.saveCart(this.cart);
+        this.cartContent.innerHTML = '';
+        this.populate(this.cart);
+        this.setCartValues(this.cart)
+        document.querySelectorAll('.bag-btn').forEach((button) => {
+          if (
+            button.innerHTML === 'In chart' &&
+            button.getAttribute('data-id') === id
+          ) {
+            button.innerHTML = 'Dodaj u košaricu';
+            button.disabled = false;
+          }
+        });
+      }
+
+      // dodaje broj vise
+      if (e.target.classList.contains('dodaj')) {
+        console.log('mod DODAVANJA');
         this.cart = this.cart.map((item) => {
           if (item.id === id) {
             item.amount += 1;
             novakolicina = item.amount;
-            console.log('novaKolicina=', novakolicina);
           }
           return item;
         });
@@ -160,16 +155,10 @@ class UI {
         storage.saveCart(this.cart);
         // set cart values
         this.setCartValues(this.cart);
-      });
-    });
+      }
 
-    // ODUZIMANJE kolicine oduzmi dijela
-    document.querySelectorAll('.oduzmi').forEach((item) => {
-      let novakolicina = 0;
-      console.log('novaKolicina minus=', novakolicina);
-      item.addEventListener('click', (e) => {
-        const id = e.target.getAttribute('data-id');
-        //  nova vrijednost polja upisanih
+      if (e.target.classList.contains('oduzmi')) {
+        console.log('mod ODUZIMANJA');
         this.cart = this.cart.map((item) => {
           if (item.id === id) {
             item.amount -= 1;
@@ -177,7 +166,6 @@ class UI {
               console.log('sada stavi nulu');
             }
             novakolicina = item.amount;
-            console.log('novaKolicina=', novakolicina);
           }
           return item;
         });
@@ -187,26 +175,48 @@ class UI {
         storage.saveCart(this.cart);
         // set cart values
         this.setCartValues(this.cart);
-
-        novakolicina = 0;
-      });
+      }
     });
 
+    // povlačimo podatke iz local storage
+    this.cart = storage.getCart();
+    // popuni side bar sa podacima iz localstorage
+    this.populate(this.cart);
+    // popuni totalsum i totalitem
+    this.setCartValues(this.cart);
+
+    // Otvosi side bar
     this.cartBtn.addEventListener('click', (e) => {
       this.showCard(storage);
     });
-    //
+
+    // zatvaranje side bara
     this.closeCartBtn.addEventListener('click', (e) => {
       this.cartOverlay.classList.remove('transparentBcg');
       this.cartDOM.classList.remove('showCart');
     });
   }
 
-  // popinjavanje DOM
+  // popinjavanje DOM za svaku
   populate(cart) {
     cart.forEach((jedanCart) => {
       this.addCartItem(jedanCart);
     });
-    console.log(this.cartContent);
+  }
+
+  // obrada podataka
+  cartLogic(storage, proizvod) {
+    //  ciscenje cijele chart liste
+    this.claerCartBtn.addEventListener('click', (e) => {
+      console.log(e);
+      this.cart = [];
+      storage.saveCart(this.cart);
+      this.setup(storage);
+      this.cartContent.innerHTML = '';
+      this.cartOverlay.classList.remove('transparentBcg');
+      this.cartDOM.classList.remove('showCart');
+      this.displayProducts(proizvod);
+      this.getBagButtons(storage);
+    });
   }
 }

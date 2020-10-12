@@ -61,7 +61,7 @@ body {
 
 /* --------------- Hero ---------------- */
 .hero {
-  min-height: calc(100vh - 60px);
+  min-height: calc(20vh - 60px);
   background: url("./images/hero-bcg.jpeg");
   background-repeat: no-repeat;
   background-size: cover;

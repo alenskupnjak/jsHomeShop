@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
   //  SET up app
   ui.setup(storage)
 
-
   // povuci podatke
   proizvodi
     .getProduct()
@@ -21,8 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // spremi podatke u local storage
       storage.saveProduct(proizvod);
+      return proizvod
     })
-    .then(() => {
+    .then((proizvod) => {
+      console.log(proizvod);
       ui.getBagButtons(storage);
+      ui.cartLogic(storage, proizvod)
     });
 });
