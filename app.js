@@ -9,7 +9,7 @@ let cart = [];
 //
 document.addEventListener('DOMContentLoaded', () => {
   //  SET up app
-  ui.setup(storage)
+  ui.setup(storage);
 
   // povuci podatke
   proizvodi
@@ -20,10 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // spremi podatke u local storage
       storage.saveProduct(proizvod);
-      return proizvod
+      return proizvod;
     })
     .then((proizvod) => {
       ui.getBagButtons(storage);
-      ui.cartLogic(storage, proizvod)
+      ui.cartLogic(storage, proizvod);
     });
 });

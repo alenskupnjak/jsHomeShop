@@ -9,15 +9,11 @@ class UI {
     this.cartTotal = document.querySelector('.cart-total');
     this.cartContent = document.querySelector('.cart-content');
     this.productsDOM = document.querySelector('.products-center');
-
+    this.cartItemTotal = document.querySelector('.cart-items-total');
     // definira se nakon renderiranje strainice
     this.btns;
-
     // polje u koje cemo spremati podatke za sidebar
     this.cart = [];
-
-    // polje u koje cemo spremati podatke za sidebar
-    this.buttonsDOM = [];
   }
 
   // prikaz polja dolje
@@ -112,6 +108,7 @@ class UI {
     });
     this.cartTotal.innerHTML = parseFloat(tepmTotal.toFixed(2));
     this.cartItems.innerHTML = itemsTotal;
+    this.cartItemTotal.innerHTML = itemsTotal;
   }
 
   // *********************************
@@ -131,20 +128,21 @@ class UI {
       //  brisi sa  cart liste
       if (e.target.classList.contains('remove-item')) {
         console.log('-- mod BRISANJA');
-        this.cart = this.cart.filter((item) => item.id !== id);
-        storage.saveCart(this.cart);
-        this.cartContent.innerHTML = '';
-        this.populate(this.cart);
-        this.setCartValues(this.cart);
-        document.querySelectorAll('.bag-btn').forEach((button) => {
-          if (
-            button.innerHTML === 'In chart' &&
-            button.getAttribute('data-id') === id
-          ) {
-            button.innerHTML = 'Dodaj u košaricu';
-            button.disabled = false;
-          }
-        });
+        this.brisiSaListe(id);
+        // this.cart = this.cart.filter((item) => item.id !== id);
+        // storage.saveCart(this.cart);
+        // this.cartContent.innerHTML = '';
+        // this.populate(this.cart);
+        // this.setCartValues(this.cart);
+        // document.querySelectorAll('.bag-btn').forEach((button) => {
+        //   if (
+        //     button.innerHTML === 'In chart' &&
+        //     button.getAttribute('data-id') === id
+        //   ) {
+        //     button.innerHTML = 'Dodaj u košaricu';
+        //     button.disabled = false;
+        //   }
+        // });
       }
 
       // dodaje broj vise
@@ -172,7 +170,7 @@ class UI {
           if (item.id === id) {
             item.amount -= 1;
             if (item.amount < 0) {
-              console.log('sada stavi nulu');
+              item.amount = 0;
             }
             novakolicina = item.amount;
           }
@@ -217,15 +215,32 @@ class UI {
   cartLogic(storage, proizvod) {
     //  ciscenje cijele chart liste
     this.claerCartBtn.addEventListener('click', (e) => {
-      console.log(e);
       this.cart = [];
       storage.saveCart(this.cart);
-      this.setup(storage);
       this.cartContent.innerHTML = '';
-      this.cartOverlay.classList.remove('transparentBcg');
-      this.cartDOM.classList.remove('showCart');
+      this.populate(this.cart);
+      this.setCartValues(this.cart);
       this.displayProducts(proizvod);
       this.getBagButtons(storage);
+    });
+  }
+
+  // brisi sa liste
+  brisiSaListe(id) {
+    console.log('id ahahah', id);
+    this.cart = this.cart.filter((item) => item.id !== id);
+    storage.saveCart(this.cart);
+    this.cartContent.innerHTML = '';
+    this.populate(this.cart);
+    this.setCartValues(this.cart);
+    document.querySelectorAll('.bag-btn').forEach((button) => {
+      if (
+        button.innerHTML === 'In chart' &&
+        button.getAttribute('data-id') === id
+      ) {
+        button.innerHTML = 'Dodaj u košaricu';
+        button.disabled = false;
+      }
     });
   }
 }
