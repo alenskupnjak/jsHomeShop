@@ -192,19 +192,28 @@ class UI {
     // popuni totalsum i totalitem
     this.setCartValues(this.cart);
 
-    // Otvosi side bar
+    // Otvori side bar, vidimo listu proizvoda u košarici
     this.cartBtn.addEventListener('click', (e) => {
       this.showCard(storage);
     });
 
-    // zatvaranje side bara
+    // zatvaranje side bara kad stisnemo križić
     this.closeCartBtn.addEventListener('click', (e) => {
       this.cartOverlay.classList.remove('transparentBcg');
       this.cartDOM.classList.remove('showCart');
     });
+
+    // zatvaranje stranice kad je overlay uključen
+    this.cartOverlay.addEventListener('click', (e) => {
+      console.log('this.cartOverlay.addEventListener', e);
+      if (e.target.classList.contains('transparentBcg')) {
+        this.cartOverlay.classList.remove('transparentBcg');
+        this.cartDOM.classList.remove('showCart');
+      }
+    });
   }
 
-  // popinjavanje DOM za svaku
+  // popinjavanje DOM za svaki proizvod
   populate(cart) {
     cart.forEach((jedanCart) => {
       this.addCartItem(jedanCart);
@@ -227,7 +236,6 @@ class UI {
 
   // brisi sa liste
   brisiSaListe(id) {
-    console.log('id ahahah', id);
     this.cart = this.cart.filter((item) => item.id !== id);
     storage.saveCart(this.cart);
     this.cartContent.innerHTML = '';
